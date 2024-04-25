@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <h1 class="text-center text-secondary my-4">Firebase Authentication</h1>
+
+    <div
+      action=""
+      class="col-11 col-md-6 col-lg-5 mx-auto my-5 rounded-3 p-3 shadow"
+    >
+      <h2 class="text-center text-secondary">Create Account</h2>
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter Email"
+        class="my-3 form-control"
+      />
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter Password"
+        class="my-3 form-control"
+      />
+      <button id="studentDetails" class="btn btn-secondary w-100 my-3">
+        Submit
+      </button>
+      <small>Alredy have an account? <a href="signin.html">Sign In</a></small>
+    </div>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        GoogleAuthProvider,
+        signInWithPopup,
+      } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyAFhNU15thzCestrRxg5E8wqa93ne2hPjU",
+        authDomain: "fir-tutorial-1d2f3.firebaseapp.com",
+        databaseURL: "https://fir-tutorial-1d2f3-default-rtdb.firebaseio.com",
+        projectId: "fir-tutorial-1d2f3",
+        storageBucket: "fir-tutorial-1d2f3.appspot.com",
+        messagingSenderId: "918085187366",
+        appId: "1:918085187366:web:06c24de3726388d016f3e7",
+        measurementId: "G-BS1475TX1V",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      // Initialize Firebase Authentication and get a reference to the service
+      const auth = getAuth(app);
+
+      //  Initialize Google Authentication and get a reference to the service
+      const provider = new GoogleAuthProvider();
+
+      let signUpWithemailandpass = document.getElementById("studentDetails");
+      signUpWithemailandpass.addEventListener("click", function () {
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            console.log("User Info : ", user);
+            alert("User signed up successfully");
+            window.location.href = "signin.html";
+          })
+          .catch((error) => {
+            if (error.code === "auth/email-already-in-use") {
+              alert("Email already in use");
+            } else if (error.code === "auth/invalid-email") {
+              alert("Invalid Email");
+            } else if (error.code === "auth/weak-password") {
+              alert("Weak Password");
+            } else {
+              alert("Error : ", error.message);
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
